@@ -1,7 +1,7 @@
 from typing import List
-from xml.etree import ElementTree
 
 from docutils.core import publish_doctree
+import defusedxml.ElementTree
 
 
 class DocstringField:
@@ -40,7 +40,7 @@ class Docstring:
         :param docstring: the docstring to parse
         """
         dom = publish_doctree(docstring).asdom()
-        tree = ElementTree.fromstring(dom.toxml())
+        tree = defusedxml.ElementTree.fromstring(dom.toxml())
         self.fields = []
 
         for field in tree.iter(tag="field"):
