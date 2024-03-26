@@ -62,7 +62,7 @@ class TelemetryService:
 
 
     def __log(self, data: Telemetry):
-        r = requests.post(self.endpoint, data=data.json(), headers={'Content-Type': 'application/json'})
+        r = requests.post(self.endpoint, data=data.json(), headers={'Content-Type': 'application/json'}, timeout=60)
         if(r.status_code != 201):
             logging.error(f"Failed to log telemetry data")
 

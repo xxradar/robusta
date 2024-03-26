@@ -106,7 +106,7 @@ class PagerdutySink(SinkBase):
         }
 
         headers = {"Content-Type": "application/json"}
-        response = requests.post(self.url, json=body, headers=headers)
+        response = requests.post(self.url, json=body, headers=headers, timeout=60)
         if not response.ok:
             logging.error(
                 f"Error sending message to PagerDuty: {response.status_code}, {response.reason}, {response.text}"

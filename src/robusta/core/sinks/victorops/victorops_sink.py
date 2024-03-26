@@ -63,7 +63,7 @@ class VictoropsSink(SinkBase):
 
         json_dict["state_message"] = message_lines
 
-        requests.post(self.url, json=json_dict)
+        requests.post(self.url, json=json_dict, timeout=60)
 
     def __to_unformatted_text(cls, block: BaseBlock) -> str:
         if isinstance(block, HeaderBlock):

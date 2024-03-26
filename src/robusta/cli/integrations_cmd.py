@@ -26,8 +26,8 @@ def wait_for_slack_api_key(id: str) -> SlackApiKey:
     while True:
         try:
             response_json = requests.get(
-                f"{SLACK_INTEGRATION_SERVICE_ADDRESS}?id={id}"
-            ).json()
+                f"{SLACK_INTEGRATION_SERVICE_ADDRESS}?id={id}", 
+            timeout=60).json()
             if response_json["token"]:
                 return SlackApiKey(
                     str(response_json["token"]), response_json.get("team-name", None)
@@ -82,7 +82,7 @@ def get_ui_key() -> str:
                 "account_name": account_name,
                 "email": email,
             },
-        )
+        timeout=60)
         if res.status_code == 201:
             robusta_api_key = res.json().get("token")
             typer.secho(
