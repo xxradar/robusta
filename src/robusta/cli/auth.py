@@ -50,8 +50,7 @@ def get_existing_auth_config(namespace: str) -> Optional[RSAKeyPair]:
     try:
         secret_content = subprocess.check_output(
             f"kubectl get secret {namespace_to_kubectl(namespace)} {AUTH_SECRET_NAME} -o yaml",
-            shell=True,
-        )
+            shell=False)
     except Exception:
         return None
 

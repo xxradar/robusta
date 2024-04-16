@@ -106,13 +106,11 @@ def fetch_runner_logs(namespace: Optional[str], all_logs=False):
             if all_logs:
                 subprocess.check_call(
                     f"kubectl logs {namespace_to_kubectl(namespace)} {get_runner_pod(namespace)} -c runner",
-                    shell=True,
-                )
+                    shell=False)
             else:
                 subprocess.check_call(
                     f"kubectl logs {namespace_to_kubectl(namespace)} {get_runner_pod(namespace)} -c runner --since={int(time.time() - start + 1)}s",
-                    shell=True,
-                )
+                    shell=False)
         except:
             log_title("Cannot fetch logs. robusta-runner not found", color="red")
             return
@@ -132,7 +130,6 @@ def get_runner_pod(namespace: str) -> Optional[str]:
         f"--field-selector=status.phase==Running "
         f"--no-headers "
         f'-o custom-columns=":metadata.name"',
-        shell=True,
-        text=True,
+        shell=False, text=True,
         capture_output=True,
     ).stdout.strip()

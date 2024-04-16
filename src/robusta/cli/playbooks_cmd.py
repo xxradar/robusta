@@ -82,8 +82,7 @@ def push(
         subprocess.check_call(
             f"kubectl exec -it {namespace_to_kubectl(namespace)} {runner_pod} -c runner "
             f"-- bash -c 'mkdir -p {PLAYBOOKS_MOUNT_LOCATION}'",
-            shell=True,
-        )
+            shell=False)
         abs_path = os.path.abspath(playbooks_directory)
         dir_name = os.path.basename(os.path.normpath(abs_path))
         if not __validate_playbooks_dir(abs_path):
@@ -92,8 +91,7 @@ def push(
         subprocess.check_call(
             f"kubectl cp {namespace_to_kubectl(namespace)} {abs_path} "
             f"{runner_pod}:{PLAYBOOKS_MOUNT_LOCATION}/{dir_name} -c runner",
-            shell=True,
-        )
+            shell=False)
         time.sleep(
             5
         )  # wait five seconds for the runner to actually reload the playbooks
@@ -117,13 +115,11 @@ def configure(
         subprocess.check_call(
             f"kubectl create secret generic {namespace_to_kubectl(namespace)} {CONFIG_SECRET_NAME} "
             f"--from-file active_playbooks.yaml={config_file} --type=Opaque -o yaml --dry-run | kubectl apply -f -",
-            shell=True,
-        )
+            shell=False)
         subprocess.check_call(
             f"kubectl annotate pods {namespace_to_kubectl(namespace)} -l robustaComponent=runner "
             f'--overwrite "playbooks-last-modified={time.time()}"',
-            shell=True,
-        )
+            shell=False)
         time.sleep(
             5
         )  # wait five seconds for the runner to actually reload the playbooks
@@ -133,8 +129,7 @@ def configure(
 def get_playbooks_config(namespace: str):
     configmap_content = subprocess.check_output(
         f"kubectl get secret {namespace_to_kubectl(namespace)} {CONFIG_SECRET_NAME} -o yaml",
-        shell=True,
-    )
+        shell=False)
     playbooks_secret = yaml.safe_load(configmap_content)
     playbooks_secret["data"]["active_playbooks.yaml"] = base64.b64decode(
         playbooks_secret["data"]["active_playbooks.yaml"]
@@ -168,8 +163,7 @@ def pull(
         subprocess.check_call(
             f"kubectl cp {namespace_to_kubectl(namespace)} "
             f"{runner_pod}:{PLAYBOOKS_MOUNT_LOCATION}/ -c runner {playbooks_directory}",
-            shell=True,
-        )
+            shell=False)
     except Exception as e:
         typer.echo(f"Failed to pull deployed playbooks {traceback.format_exc()}")
 
@@ -193,8 +187,7 @@ def list_dirs(
         ls_res = subprocess.check_output(
             f"kubectl exec -it {namespace_to_kubectl(namespace)} {runner_pod} -c runner "
             f"-- bash -c 'ls {PLAYBOOKS_MOUNT_LOCATION}'",
-            shell=True,
-        )
+            shell=False)
 
         log_title(f"Stored playbooks directories: \n { ls_res.decode('utf-8')}")
 
@@ -230,8 +223,7 @@ def delete(
         subprocess.check_call(
             f"kubectl exec -it {namespace_to_kubectl(namespace)} {runner_pod} -c runner "
             f"-- bash -c 'rm -rf {path_to_delete}'",
-            shell=True,
-        )
+            shell=False)
 
     except Exception as e:
         typer.echo(f"Failed to delete deployed playbooks {traceback.format_exc()}")

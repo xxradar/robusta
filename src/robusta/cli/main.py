@@ -363,12 +363,12 @@ def demo():
     """Deliberately deploy a crashing pod to kubernetes so you can test robusta's response"""
     CRASHPOD_YAML = "https://gist.githubusercontent.com/robusta-lab/283609047306dc1f05cf59806ade30b6/raw/crashpod.yaml"
     log_title("Deploying a crashing pod to kubernetes...")
-    subprocess.check_call(f"kubectl apply -f {CRASHPOD_YAML}", shell=True)
+    subprocess.check_call(f"kubectl apply -f {CRASHPOD_YAML}", shell=False)
     log_title(
         "In ~30 seconds you should receive a slack notification on a crashing pod"
     )
     time.sleep(60)
-    subprocess.check_call(f"kubectl delete deployment crashpod", shell=True)
+    subprocess.check_call(f"kubectl delete deployment crashpod", shell=False)
     log_title("Done!")
 
 
@@ -397,8 +397,7 @@ def logs(
     try:
         subprocess.check_call(
             f"kubectl logs {stream} {namespace_to_kubectl(namespace)} {resource_name} -c runner {since} {tail} {context}",
-            shell=True,
-        )
+            shell=False)
     except Exception as e:
         log_title("error fetching logs; see help for more options.", color="red")
 
