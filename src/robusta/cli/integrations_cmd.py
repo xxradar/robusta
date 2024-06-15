@@ -1,4 +1,3 @@
-import base64
 import os
 import textwrap
 
@@ -7,11 +6,11 @@ import uuid
 
 import requests
 import typer
-from pydantic import BaseModel
 from collections import namedtuple
 
 from .backend_profile import backend_profile
 from .utils import log_title
+from security import safe_requests
 
 app = typer.Typer()
 
@@ -25,8 +24,7 @@ SlackApiKey = namedtuple("SlackApiKey", "key team_name")
 def wait_for_slack_api_key(id: str) -> SlackApiKey:
     while True:
         try:
-            response_json = requests.get(
-                f"{SLACK_INTEGRATION_SERVICE_ADDRESS}?id={id}"
+            response_json = safe_requests.get(f"{SLACK_INTEGRATION_SERVICE_ADDRESS}?id={id}"
             ).json()
             if response_json["token"]:
                 return SlackApiKey(

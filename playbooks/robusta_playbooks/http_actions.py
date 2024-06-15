@@ -1,6 +1,7 @@
 from robusta.api import ActionParams, action, ExecutionBaseEvent, FileBlock, Finding, Optional, FindingSource, FindingType, MarkdownBlock
 from urllib.error import URLError, HTTPError
 import requests
+from security import safe_requests
 
 
 class HTTP_GET(ActionParams):
@@ -35,7 +36,7 @@ def http_get(event: ExecutionBaseEvent, action_params: HTTP_GET):
 
     try:
 
-        result = requests.get(action_params.url, params=action_params.params)
+        result = safe_requests.get(action_params.url, params=action_params.params)
         if action_params.get_response:
             finding.title = f"Response received from {action_params.url} "
             finding.add_enrichment(

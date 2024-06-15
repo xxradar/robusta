@@ -1,13 +1,10 @@
 import logging
-
-import requests
 from string import Template
-from datetime import datetime, timedelta
-from urllib.parse import urlparse, unquote_plus
+from datetime import datetime
 from collections import defaultdict
-import re
 
 from robusta.api import *
+from security import safe_requests
 
 
 class SeverityParams(ActionParams):
@@ -274,7 +271,7 @@ def show_stackoverflow_search(event: ExecutionBaseEvent, params: SearchTermParam
     This action can be used together with the stack_overflow_enricher.
     """
     url = f"https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q={params.search_term}&site=stackoverflow"
-    result = requests.get(url).json()
+    result = safe_requests.get(url).json()
     logging.info(f"asking on stackoverflow: url={url}")
     answers = [f"<{a['link']}|{a['title']}>" for a in result["items"]]
     finding = Finding(
