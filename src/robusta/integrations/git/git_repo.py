@@ -11,6 +11,7 @@ import re
 from typing import List, Dict
 
 from ...core.model.env_vars import GIT_MAX_RETRIES
+from security import safe_command
 
 GIT_DIR_NAME = "robusta-git"
 REPO_LOCAL_BASE_DIR = os.path.join(
@@ -109,8 +110,7 @@ class GitRepo:
         if os.name == "nt":
             shell = True
 
-        result = subprocess.run(
-            cmd,
+        result = safe_command.run(subprocess.run, cmd,
             cwd=self.repo_local_path,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
