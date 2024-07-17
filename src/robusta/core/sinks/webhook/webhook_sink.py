@@ -47,7 +47,7 @@ class WebhookSink(SinkBase):
                 break
             message += wrapped
 
-        requests.post(self.url, data=message)
+        requests.post(self.url, data=message, timeout=60)
 
     @classmethod
     def __to_clear_text(cls, markdown_text: str) -> str:

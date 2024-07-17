@@ -223,13 +223,13 @@ class DiscordSender:
         )
 
         try:
-            response = requests.post(self.url, json=discord_msg)
+            response = requests.post(self.url, json=discord_msg, timeout=60)
             response.raise_for_status()
             if attachment_blocks:
                 response = requests.post(self.url, data={
                     "username": discord_msg["username"],
                     "avatar_url": ROBUSTA_LOGO_URL,
-                }, files=attachment_blocks)
+                }, files=attachment_blocks, timeout=60)
                 response.raise_for_status()
         except Exception as e:
             logging.error(

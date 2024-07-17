@@ -18,8 +18,8 @@ class ArgoCDClient:
         sync_url = self.SYNC_APP_PATTERN.format(self.url, application_name)
 
         argo_response = requests.post(
-            sync_url, headers=self.headers, verify=self.verify_cert
-        )
+            sync_url, headers=self.headers, verify=self.verify_cert, 
+        timeout=60)
         if argo_response.status_code != 200:
             logging.error(
                 f"Failed to sync application {application_name} on argo {self.url} {argo_response.reason}"

@@ -145,7 +145,7 @@ class MsTeamsMsg:
             complete_card_map: dict = MsTeamsCard(self.entire_msg).get_map_value()
             self._put_text_files_data_up_to_max_limit(complete_card_map)
 
-            response = requests.post(self.webhook_url, json=complete_card_map)
+            response = requests.post(self.webhook_url, json=complete_card_map, timeout=60)
             if response.status_code not in [200, 201]:
                 logging.error(f"Error sending to ms teams json: {complete_card_map} error: {response.reason}")
 
