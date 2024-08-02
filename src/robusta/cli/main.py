@@ -1,7 +1,6 @@
 import base64
 import json
 import logging
-import random
 import subprocess
 import time
 import uuid
@@ -40,6 +39,7 @@ from .slack_verification import verify_slack_channel
 from .slack_feedback_message import SlackFeedbackMessagesSender
 from .playbooks_cmd import app as playbooks_commands
 from .utils import log_title, namespace_to_kubectl
+import secrets
 
 
 app = typer.Typer()
@@ -493,7 +493,7 @@ def demo_alert(
 
         job: Job = Job(
             metadata=ObjectMeta(
-                name=f"alert-job-{random.randint(0, 10000)}",
+                name=f"alert-job-{secrets.SystemRandom().randint(0, 10000)}",
                 namespace=pod.metadata.namespace,
             ),
             spec=JobSpec(
