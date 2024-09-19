@@ -1,6 +1,6 @@
-import requests
 import typer
 from .backend_profile import backend_profile
+from security import safe_requests
 
 
 def handle_eula(account_id, robusta_api_key, cloud_routing_enabled):
@@ -17,7 +17,7 @@ def handle_eula(account_id, robusta_api_key, cloud_routing_enabled):
 
         if eula_approved:
             try:
-                requests.get(f"{eula_url}?account_id={account_id}")
+                safe_requests.get(f"{eula_url}?account_id={account_id}")
             except Exception:
                 typer.echo(f"\nEula approval failed: {eula_url}")
             return

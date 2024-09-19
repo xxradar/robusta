@@ -8,8 +8,8 @@ from typing import Optional, List
 import click_spinner
 import toml
 import typer
-import requests
 from dpath.util import get
+from security import safe_requests
 
 PLAYBOOKS_DIR = "playbooks/"
 
@@ -71,7 +71,7 @@ def _build_exec_command(command: str, namespace: Optional[str]) -> List[str]:
 
 def download_file(url, local_path):
     with click_spinner.spinner():
-        response = requests.get(url)
+        response = safe_requests.get(url)
         response.raise_for_status()
     with open(local_path, "wb") as f:
         f.write(response.content)
