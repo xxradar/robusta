@@ -10,6 +10,7 @@ import toml
 import typer
 import requests
 from dpath.util import get
+from security import safe_command
 
 PLAYBOOKS_DIR = "playbooks/"
 
@@ -126,8 +127,7 @@ def get_package_name(playbooks_dir: str) -> str:
 
 
 def get_runner_pod(namespace: str) -> Optional[str]:
-    return subprocess.run(
-        f"kubectl get pods {namespace_to_kubectl(namespace)} "
+    return safe_command.run(subprocess.run, f"kubectl get pods {namespace_to_kubectl(namespace)} "
         f'--selector="robustaComponent=runner" '
         f"--field-selector=status.phase==Running "
         f"--no-headers "
