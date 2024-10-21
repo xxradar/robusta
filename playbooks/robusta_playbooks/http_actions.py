@@ -35,7 +35,7 @@ def http_get(event: ExecutionBaseEvent, action_params: HTTP_GET):
 
     try:
 
-        result = requests.get(action_params.url, params=action_params.params)
+        result = requests.get(action_params.url, params=action_params.params, timeout=60)
         if action_params.get_response:
             finding.title = f"Response received from {action_params.url} "
             finding.add_enrichment(
@@ -110,7 +110,7 @@ def http_post(event: ExecutionBaseEvent, action_params: HTTP_POST):
     try:
 
         result = requests.post(
-            action_params.url, data=action_params.data)
+            action_params.url, data=action_params.data, timeout=60)
 
         if action_params.get_response:
             finding.title = f"Response received from {action_params.url} "

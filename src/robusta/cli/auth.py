@@ -73,7 +73,7 @@ class TokenDetails(BaseModel):
 
 def store_server_token(token_details: TokenDetails, debug: bool = False) -> bool:
     try:
-        response = requests.post(backend_profile.robusta_store_token_url, json=token_details.dict())
+        response = requests.post(backend_profile.robusta_store_token_url, json=token_details.dict(), timeout=60)
         if debug and response.status_code != 201:
             typer.secho(f"Failed to store server token. status-code {response.status_code} text {response.text}")
 

@@ -44,7 +44,7 @@ def report_rendering_task(event: ExecutionBaseEvent, action_params: ReportParams
                     "apiKey": action_params.grafana_api_key.get_secret_value(),
                     "panelUrl": panel_url,
                 },
-            )
+            timeout=60)
             finding.add_enrichment([FileBlock("panel.png", image.content)])
     except requests.exceptions.ConnectionError:
         finding.add_enrichment([

@@ -274,7 +274,7 @@ def show_stackoverflow_search(event: ExecutionBaseEvent, params: SearchTermParam
     This action can be used together with the stack_overflow_enricher.
     """
     url = f"https://api.stackexchange.com/2.2/search/advanced?order=desc&sort=relevance&q={params.search_term}&site=stackoverflow"
-    result = requests.get(url).json()
+    result = requests.get(url, timeout=60).json()
     logging.info(f"asking on stackoverflow: url={url}")
     answers = [f"<{a['link']}|{a['title']}>" for a in result["items"]]
     finding = Finding(
