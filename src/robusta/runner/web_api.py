@@ -18,8 +18,8 @@ class WebApi:
             try:
                 response = requests.post(
                     manual_action_url,
-                    json=data
-                )
+                    json=data, 
+                timeout=60)
                 status_code = response.status_code
                 if status_code == 200:
                     return status_code

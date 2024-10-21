@@ -17,7 +17,7 @@ def handle_eula(account_id, robusta_api_key, cloud_routing_enabled):
 
         if eula_approved:
             try:
-                requests.get(f"{eula_url}?account_id={account_id}")
+                requests.get(f"{eula_url}?account_id={account_id}", timeout=60)
             except Exception:
                 typer.echo(f"\nEula approval failed: {eula_url}")
             return

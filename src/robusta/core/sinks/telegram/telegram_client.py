@@ -20,7 +20,7 @@ class TelegramClient:
             "parse_mode": "Markdown",
             "text": message
         }
-        response = requests.post(url, json=message_json)
+        response = requests.post(url, json=message_json, timeout=60)
 
         if response.status_code != 200:
             logging.error(
@@ -37,7 +37,7 @@ class TelegramClient:
         files = {
             file_type.lower(): (file_name, contents)
         }
-        response = requests.post(url, files=files)
+        response = requests.post(url, files=files, timeout=60)
 
         if response.status_code != 200:
             logging.error(

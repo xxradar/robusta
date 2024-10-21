@@ -54,7 +54,7 @@ class OutgoingActionRequest:
             body=body,
         )
 
-        resp = requests.post(RELAY_EXTERNAL_ACTIONS_URL, json=action_request.dict())
+        resp = requests.post(RELAY_EXTERNAL_ACTIONS_URL, json=action_request.dict(), timeout=60)
         if resp.status_code != 200:
             logging.error(
                 f"Failed to send external action request {resp.status_code} {resp.reason}"

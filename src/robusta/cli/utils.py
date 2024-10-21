@@ -71,7 +71,7 @@ def _build_exec_command(command: str, namespace: Optional[str]) -> List[str]:
 
 def download_file(url, local_path):
     with click_spinner.spinner():
-        response = requests.get(url)
+        response = requests.get(url, timeout=60)
         response.raise_for_status()
     with open(local_path, "wb") as f:
         f.write(response.content)
